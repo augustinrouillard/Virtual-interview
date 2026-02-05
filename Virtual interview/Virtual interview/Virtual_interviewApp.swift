@@ -22,9 +22,11 @@ struct Virtual_interviewApp: App {
             ImmersiveView()
                 .environment(appModel)
                 .onAppear {
+                    // Marque l'état comme "ouvert" lorsque l'espace immersif apparaît.
                     appModel.immersiveSpaceState = .open
                 }
                 .onDisappear {
+                    // Marque l'état comme "fermé" lorsque l'espace immersif disparaît.
                     appModel.immersiveSpaceState = .closed
                 }
         }
