@@ -14,7 +14,7 @@ struct Virtual_interviewApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SpeechDemoView()
                 .environment(appModel)
         }
 
