@@ -19,5 +19,14 @@
 			</array>
 		</dict>
 	</dict>
+	<key>CFBundleIdentifier</key>
+	<string>&lt;key&gt;NSSpeechRecognitionUsageDescription&lt;/key&gt;
+&lt;string&gt;Cette app utilise la reconnaissance vocale pour détecter le mot ‘bonjour’.&lt;/string&gt;
+&lt;key&gt;NSMicrophoneUsageDescription&lt;/key&gt;
+&lt;string&gt;Cette app utilise le micro pour la reconnaissance vocale.&lt;/string&gt;</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Cette application a besoin d&apos;accéder au microphone pour écouter vos commandes vocales.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>This app uses speech recognition to convert your voice to text so you can control features hands‑free.</string>
 </dict>
 </plist>
