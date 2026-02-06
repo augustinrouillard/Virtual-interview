@@ -1,56 +1,38 @@
-//
-//  ContentView.swift
-//  Virtual interview
-//
-//  Created by bpce-si on 05/02/2026.
-//
-
 import SwiftUI
-import RealityKit
-import RealityKitContent
 
 struct ContentView: View {
-
     @Environment(AppModel.self) private var appModel
-    @Environment(\.openImmersiveSpace) private var openImmersiveSpace
+    @Environment(AIService.self) private var aiService
 
     var body: some View {
-        VStack {
-            Model3D(named: "Scene", bundle: realityKitContentBundle)
-                .padding(.bottom, 50)
-
-            Text("Hello, world!")
-
-            // Indicateur d'état pour comprendre le cycle d'ouverture/fermeture de l'espace immersif.
-            Text("État espace immersif: \(String(describing: appModel.immersiveSpaceState))")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .padding(.bottom, 8)
-
-            ToggleImmersiveSpaceButton()
-
-            Text("Appuyez sur le bouton pour ouvrir/fermer l'espace immersif et afficher les triangles.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .onAppear {
-            // Diagnostic: au lancement, on tente d'ouvrir l'espace immersif automatiquement
-            // pour vérifier que la configuration fonctionne. Cela vous permet de voir
-            // immédiatement les triangles sans appuyer sur le bouton. Vous pouvez
-            // commenter/supprimer ce bloc une fois vos tests terminés.
-            Task { @MainActor in
-                if appModel.immersiveSpaceState == .closed {
-                    let result = await openImmersiveSpace(id: appModel.immersiveSpaceID)
-                    // Journalise le résultat pour le diagnostic.
-                    print("openImmersiveSpace result:", String(describing: result))
+        ZStack {
+            LinearGradient(
+                colors: [Color(hex: "E8EAF6"), Color(hex: "F5F5F7")],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ).ignoresSafeArea()
+            
+            if aiService.simulationTerminee {
+                SpeechDemoView()
+            } else {
+                switch appModel.interviewState {
+                case .welcome: WelcomeView()
+                case .recording: RecordingView()
+                case .finished: DebriefView()
                 }
             }
         }
-        .padding()
+        .animation(.easeInOut, value: appModel.interviewState)
     }
 }
 
-#Preview(windowStyle: .automatic) {
-    ContentView()
-        .environment(AppModel())
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let r, g, b: UInt64
+        (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        self.init(.sRGB, red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255, opacity: 1)
+    }
 }
